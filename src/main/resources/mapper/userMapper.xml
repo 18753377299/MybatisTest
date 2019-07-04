@@ -1,0 +1,64 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.dao.UserMapper">
+    <!--resultMap 一对一 -->
+	<resultMap id="userOrderResultMap" type="com.example.vo.Orders">
+		<id column="id" property="id"/>
+		<result column="user_id" property="userId"/>
+		<result column="NUMBER" property="number"/>
+		<result column="createtime" property="createTime"/>
+		<result column="note" property="note"/>
+<!-- 		association:用于映射关联查询单个对象的信息， -->
+<!-- 		property：要将关联查询的而用户信息映射到orders中那个属性 -->
+		<association javaType="com.example.vo.User" property="user">
+			<result column="username" property="username"/>
+			<result column="sex" property="sex"/>
+		</association>
+	</resultMap>
+	
+<!-- 	一对多 -->
+	<resultMap id="userOrderResultMapMore" type="com.example.vo.Orders">
+		<id column="id" property="id"/>
+		<result column="user_id" property="userId"/>
+		<result column="NUMBER" property="number"/>
+		<result column="createtime" property="createTime"/>
+		<result column="note" property="note"/>
+<!-- 		collection:对关联查询到多条记录映射到集合对象中， -->
+<!-- 		ofType：指定映射到list集合属性中pojo的类型 -->
+			
+<!-- 		<collection ofType="com.example.vo.OrderDetail" property="orderDetails"> -->
+<!-- 			<id column="id" property="id"/> -->
+<!-- 			<result column="orders_id" property="ordersId"/> -->
+<!-- 			<result column="items_id" property="itemsId"/> -->
+<!-- 			<result column="items_num" property="itemsNum"/> -->
+<!-- 		</collection> -->
+
+			<collection resultMap="detailMap" property="orderDetails"/>
+	</resultMap>
+	<resultMap id="detailMap" type="com.example.vo.OrderDetail">
+		<id column="id" property="id"/> 
+		<result column="orders_id" property="ordersId"/>
+		<result column="items_id" property="itemsId"/>
+		<result column="items_num" property="itemsNum"/>
+	</resultMap>
+	
+	<select id="findByUserAndOrder" resultType="com.example.vo.OrderCustom">
+		select orders.* ,user.sex,user.username from  b_user user, b_orders orders  where  user.id =orders.user_id;
+	</select>
+<!-- 	查询通过resultMap -->
+	<select id="findUserAndOrderByMap" resultMap="userOrderResultMap">
+		select orders.* ,user.sex,user.username from  b_user user, b_orders orders  where  user.id =orders.user_id;
+	</select>
+	
+	<!-- 一对多查询通过resultMap -->
+	<select id="findUserAndOrderByMapMore" resultMap="userOrderResultMapMore">
+		select  orders.* ,user.sex,user.username ,orderdetail.*
+		 from  b_user user, b_orders orders,b_orderdetail orderdetail 
+		 where  user.id =orders.user_id and orderdetail.orders_id =orders.id
+	</select>
+	
+	
+
+</mapper>

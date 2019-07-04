@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.dao.UserMapper">
+	
+    <select id="findDeptById" parameterType="Integer" resultType="dept"> 
+      select * from dept where deptno=#{deptno}
+    </select>
+    
+    <select id="findDeptByName" parameterType="String"  resultType="dept">
+      select * from  dept where 1=1 
+      <if test="_parameter !=null">
+        and dbsource like '%${value}%'
+      </if>
+    </select>
+<!--     添加用户 -->
+	<insert id="insetDept"  parameterType="dept">
+<!-- 		这个是主键自增类型的主键方法，order是执行顺序 -->
+	   <selectKey keyProperty="deptNo" order="AFTER" resultType="Integer">
+	   		select LAST_INSERT_ID()
+	   </selectKey>
+	 	insert into dept(dname,dbsource) values (#{dName},#{dbSource})
+	</insert>
+    
+</mapper>

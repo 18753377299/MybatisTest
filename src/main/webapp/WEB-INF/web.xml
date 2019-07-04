@@ -1,0 +1,29 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  	
+  	<servlet>
+<!--   	springmvc前端控制器 -->
+  		<servlet-name>springmvc</servlet-name>
+  		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  		<init-param>
+<!--   		加载文件，映射器、适配器 -->
+  			<param-name>contextLocationConfig</param-name>
+  			<param-value>classpath:config/springmvc.xml</param-value>
+  		</init-param>
+  	</servlet>
+  	
+  	<servlet-mapping>
+  		<servlet-name>springmvc</servlet-name>
+  		<!-- 
+  		第一种:*.action,访问以.action结尾的由DispatcherServlet进行解析
+  		第二种: /,所有访问的地址都由DispatcherServlet 进行解析，对于静态文件的解析需要配置不让DispatcherServlet 进行解析，
+  		此种方式可以实现restful风格的url
+  		第三种： /* ， 这样配置不对，最终哟啊转发到一个jsp页面时，任然会由DispatcherServlet 解析jsp，不能根据jsp页面找到Handler，会报错。
+  		 -->
+  		<url-pattern>/</url-pattern>
+  	</servlet-mapping>
+</web-app>
